@@ -63,6 +63,7 @@ def preprocess_question(question):
     question = process_text(question)
     return question.split(" ")
 
+# 1. データローダーの作成
 class VQADataset(torch.utils.data.Dataset):
     def __init__(self, df_path, image_dir, transform=None, answer=True):
         self.transform = transform
@@ -115,6 +116,8 @@ class VQADataset(torch.utils.data.Dataset):
     def __len__(self):
         return len(self.df)
 
+# 2. 評価指標の実装
+# 簡単にするならBCEを利用する
 def VQA_criterion(batch_pred: torch.Tensor, batch_answers: torch.Tensor):
     total_acc = 0.
 
@@ -132,6 +135,8 @@ def VQA_criterion(batch_pred: torch.Tensor, batch_answers: torch.Tensor):
 
     return total_acc / len(batch_pred)
 
+# 3. モデルのの実装
+# ResNetを利用できるようにしておく
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -265,6 +270,7 @@ class VQAModel(nn.Module):
 
         return x
 
+# 4. 学習の実装
 def train(model, dataloader, optimizer, criterion, device):
     model.train()
 
